@@ -1,0 +1,33 @@
+DISTRO ?= "fsl-imx-xwayland"
+MACHINE ?= "osm-imx93"
+SDKMACHINE ?= "x86_64"
+
+# Extra options that can be changed by the user
+INHERIT += "image-buildinfo"
+#INHERIT += "rm_work"
+
+BB_HASHSERVE = "auto"
+BB_HASHSERVE_UPSTREAM = "wss://hashserv.yoctoproject.org/ws"
+BB_SIGNATURE_HANDLER = "OEEquivHash"
+SSTATE_MIRRORS ?= "file://.* http://cdn.jsdelivr.net/yocto/sstate/all/PATH;downloadfilename=PATH"
+
+#DL_DIR = ""
+#SSTATE_DIR = ""
+
+ACCEPT_FSL_EULA = "1"
+
+PREFERRED_VERSION_nativesdk-qemu = "8.2.7"
+PREFERRED_VERSION_nativesdk-qemu-common = "8.2.7"
+PREFERRED_VERSION_nativesdk-qemu-dev = "8.2.7"
+PREFERRED_VERSION_qemu = "8.2.7"
+PREFERRED_VERSION_qemu-native = "8.2.7"
+PREFERRED_VERSION_qemu-native-common = "8.2.7"
+PREFERRED_VERSION_qemu-native-dev = "8.2.7"
+
+IMAGE_BOOT_FILES:remove:osm-imx93 = " \
+    imx93-11x11-evk_m33_TCM_low_power_wakeword.bin \
+    imx93-11x11-evk_m33_TCM_power_mode_switch.bin \
+    imx93-11x11-evk_m33_TCM_rpmsg_lite_pingpong_rtos_linux_remote.bin \
+    imx93-11x11-evk_m33_TCM_rpmsg_lite_str_echo_rtos.bin \
+    imx93-11x11-evk_m33_TCM_sai_low_power_audio.bin \
+"

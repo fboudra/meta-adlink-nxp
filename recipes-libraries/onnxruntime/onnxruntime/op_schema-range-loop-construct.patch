@@ -1,0 +1,33 @@
+error: loop variable 'op_schema' creates a copy
+       from type 'const gsl::not_null<const onnx::OpSchema*>'
+       [-Werror=range-loop-construct]
+use reference type to prevent copying
+
+Signed-off-by: Fathi Boudra <fathi.boudra@linaro.org>
+Upstream-Status: Inappropriate [linaro specific]
+---
+ onnxruntime/core/optimizer/selectors_actions/selector_action_transformer.cc |    2 +-
+ onnxruntime/core/session/inference_session.cc                               |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+--- a/onnxruntime/core/optimizer/selectors_actions/selector_action_transformer.cc
++++ b/onnxruntime/core/optimizer/selectors_actions/selector_action_transformer.cc
+@@ -150,7 +150,7 @@ static Status MatchAndProcess(
+       RuntimeOptimizationRecord::ProducedOpIdVector produced_op_ids{};
+       produced_op_ids.reserve(action_saved_state.produced_node_op_schemas.size());
+ 
+-      for (const auto op_schema : action_saved_state.produced_node_op_schemas) {
++      for (const auto& op_schema : action_saved_state.produced_node_op_schemas) {
+         produced_op_ids.push_back(utils::MakeOpId(*op_schema));
+         if (save_context->record_produced_node_op_schema) {
+           status = save_context->record_produced_node_op_schema(*op_schema);
+--- a/onnxruntime/core/session/inference_session.cc
++++ b/onnxruntime/core/session/inference_session.cc
+@@ -830,7 +830,7 @@ common::Status InferenceSession::SaveToO
+   ORT_RETURN_IF_ERROR(kernel_type_str_resolver.RegisterGraphNodeOpSchemas(model_->MainGraph()));
+   ORT_RETURN_IF_ERROR(standalone::RegisterCustomOpNodeSchemas(kernel_type_str_resolver, model_->MainGraph()));
+ 
+-  for (const auto op_schema : saved_runtime_optimization_produced_node_op_schemas_) {
++  for (const auto& op_schema : saved_runtime_optimization_produced_node_op_schemas_) {
+     ORT_RETURN_IF_ERROR(kernel_type_str_resolver.RegisterOpSchema(*op_schema));
+   }
